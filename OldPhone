@@ -1,0 +1,92 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        string messege = "227*# ";
+        int[] pressCounts = new int[10]; // Array for pulse
+        string result = ""; // in blak to store messege 
+        
+        // in this part I put the counter because on my first try the system was sorting the letters in numerical order, basically when you work to write ‘Hello’, the system was saying ‘EHLO’, also it was not able to understand when you write separate letters, so I added a counter with spaces to first of all make it understand that 555 and 555 is ‘LL’ and not only ‘L’ but I also saved the letter that actually goes instead of putting it in numerical order as it did at the beginning.
+        
+        int spacioCounter = 0; 
+
+  
+        // this counter basically takes the messege and check first if its a digit, then it convert the string to a numeric value for comparison and if it detect a " " the find letter gets storage in result and the counter gets reset and does this for its character in messege 
+        foreach (char c in messege)
+        {
+            if (char.IsDigit(c))
+            {
+                int key = (int)char.GetNumericValue(c);
+                pressCounts[key]++;
+            }
+            else if (c == ' ')
+            {
+                // gets the letter and reset the counter
+                result += GetCharacterFromPressCounts(pressCounts);
+                ResetPressCounts(pressCounts);
+            }
+        }
+
+        // gets the last pulsation
+        result += GetCharacterFromPressCounts(pressCounts);
+
+        Console.WriteLine("Result: " + result);
+    }
+
+    // the code takes the entered message and runs through it, counting the number of times a number is repeated in a row and the spaces in the message, in order to understand when a key is not pressed, and then goes through a for with a switch that, depending on the key and the number of times it was pressed, gets the corresponding letter.
+    
+    static string GetCharacterFromPressCounts(int[] pressCounts)
+    {
+        string result = "";
+        for (int i = 0; i <= 9; i++)
+        {
+            if (pressCounts[i] > 0)
+            {
+                int index = (pressCounts[i] - 1) % GetMaxLetters(i);
+                switch (i)
+                {
+                    case 2: result += "ABC"[index]; break; // A, B, C
+                    case 3: result += "DEF"[index]; break; // D, E, F
+                    case 4: result += "GHI"[index]; break; // G, H, I
+                    case 5: result += "JKL"[index]; break; // J, K, L
+                    case 6: result += "MNO"[index]; break; // M, N, O
+                    case 7: result += "PQRS"[index]; break; // P, Q, R, S
+                    case 8: result += "TUV"[index]; break; // T, U, V
+                    case 9: result += "WXYZ"[index]; break; // W, X, Y, Z
+                    default:
+                    
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    // restart counter 
+    static void ResetPressCounts(int[] pressCounts)
+    {
+        for (int i = 0; i < pressCounts.Length; i++)
+        {
+            pressCounts[i] = 0;
+        }
+    }
+
+    // define max letters for each key
+    static int GetMaxLetters(int key)
+    {
+        return key switch
+        {
+            2 => 3, // A, B, C
+            3 => 3, // D, E, F
+            4 => 3, // G, H, I
+            5 => 3, // J, K, L
+            6 => 3, // M, N, O
+            7 => 4, // P, Q, R, S
+            8 => 3, // T, U, V
+            9 => 4, // W, X, Y, Z
+            _ => 0,
+        };
+    }
+}
